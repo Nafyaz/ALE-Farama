@@ -1,0 +1,14 @@
+artifact_uri: file:///home/nafis/E/Farama/ALE-Farama/DQN/Breakout/mlruns/604869960711400830/774b79a82408455880e68f3e89da31db/artifacts
+end_time: 1762660225758
+entry_point_name: ''
+experiment_id: '604869960711400830'
+lifecycle_stage: active
+run_id: 774b79a82408455880e68f3e89da31db
+run_name: legendary-turtle-826
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1762660223788
+status: 4
+tags: []
+user_id: nafis
