@@ -1,0 +1,14 @@
+artifact_uri: file:///home/nafis/E/Farama/ALE-Farama/DQN/Breakout/mlruns/153824165808799803/24a902552f71462798bf7cd68a9c4098/artifacts
+end_time: 1766845475848
+entry_point_name: ''
+experiment_id: '153824165808799803'
+lifecycle_stage: active
+run_id: 24a902552f71462798bf7cd68a9c4098
+run_name: calm-wasp-574
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766845475709
+status: 4
+tags: []
+user_id: nafis

@@ -1,0 +1,14 @@
+artifact_uri: file:///home/nafis/E/Farama/ALE-Farama/DQN/Breakout/mlruns/153824165808799803/d90b779f7ece48b48bf9e9b1cac71790/artifacts
+end_time: 1766845582351
+entry_point_name: ''
+experiment_id: '153824165808799803'
+lifecycle_stage: active
+run_id: d90b779f7ece48b48bf9e9b1cac71790
+run_name: whimsical-lynx-955
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766845582211
+status: 4
+tags: []
+user_id: nafis

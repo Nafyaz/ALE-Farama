@@ -1,0 +1,14 @@
+artifact_uri: file:///home/nafis/E/Farama/ALE-Farama/DQN/Breakout/mlruns/153824165808799803/c7a4d2906c314c3aaf553f1629632a9d/artifacts
+end_time: 1766836693322
+entry_point_name: ''
+experiment_id: '153824165808799803'
+lifecycle_stage: active
+run_id: c7a4d2906c314c3aaf553f1629632a9d
+run_name: thundering-conch-243
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766836693177
+status: 4
+tags: []
+user_id: nafis

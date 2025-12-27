@@ -9,7 +9,7 @@ from ReplayBuffer import ReplayBuffer
 class DQNAgent:
     def __init__(
         self,
-        stack_size: int,
+        state_shape: tuple,
         action_dim: int,
         replay_buffer: ReplayBuffer,
         learning_rate: float,
@@ -27,8 +27,8 @@ class DQNAgent:
         self.epsilon_min = epsilon_min
         self.epsilon_decay = epsilon_decay
 
-        self.model = DQN(stack_size, action_dim).to(self.device)
-        self.target_model = DQN(stack_size, action_dim).to(self.device)
+        self.model = DQN(state_shape, action_dim).to(self.device)
+        self.target_model = DQN(state_shape, action_dim).to(self.device)
         self.target_model.load_state_dict(self.model.state_dict())
 
         self.optimizer = optim.Adam(self.model.parameters(), lr=learning_rate)

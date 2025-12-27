@@ -1,0 +1,14 @@
+artifact_uri: file:///home/nafis/E/Farama/ALE-Farama/DQN/Breakout/mlruns/153824165808799803/88f5783ab0b74884af8d8e6dff01e0ec/artifacts
+end_time: 1766845528245
+entry_point_name: ''
+experiment_id: '153824165808799803'
+lifecycle_stage: active
+run_id: 88f5783ab0b74884af8d8e6dff01e0ec
+run_name: glamorous-ant-895
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766845528107
+status: 4
+tags: []
+user_id: nafis

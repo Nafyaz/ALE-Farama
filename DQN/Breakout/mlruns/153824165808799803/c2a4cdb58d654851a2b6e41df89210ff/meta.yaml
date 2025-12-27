@@ -1,0 +1,14 @@
+artifact_uri: file:///home/nafis/E/Farama/ALE-Farama/DQN/Breakout/mlruns/153824165808799803/c2a4cdb58d654851a2b6e41df89210ff/artifacts
+end_time: 1766845449877
+entry_point_name: ''
+experiment_id: '153824165808799803'
+lifecycle_stage: active
+run_id: c2a4cdb58d654851a2b6e41df89210ff
+run_name: thoughtful-jay-939
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766845449737
+status: 4
+tags: []
+user_id: nafis

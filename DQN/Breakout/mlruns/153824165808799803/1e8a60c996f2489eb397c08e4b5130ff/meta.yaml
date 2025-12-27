@@ -1,0 +1,14 @@
+artifact_uri: file:///home/nafis/E/Farama/ALE-Farama/DQN/Breakout/mlruns/153824165808799803/1e8a60c996f2489eb397c08e4b5130ff/artifacts
+end_time: 1765444797010
+entry_point_name: ''
+experiment_id: '153824165808799803'
+lifecycle_stage: active
+run_id: 1e8a60c996f2489eb397c08e4b5130ff
+run_name: painted-mink-638
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1765444774093
+status: 4
+tags: []
+user_id: nafis
