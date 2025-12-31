@@ -2,6 +2,7 @@ import ale_py
 import gymnasium as gym
 import mlflow
 import numpy as np
+from tqdm import trange
 
 from DQNAgent import DQNAgent
 from ReplayBuffer import ReplayBuffer
@@ -14,18 +15,19 @@ def train():
 
     env_name = "ALE/Breakout-v5"
     stack_size = 4
-    num_steps = 5
+    num_steps = 100000
     batch_size = 64
-    replay_buffer_size = 100
+    replay_buffer_size = 1000
     target_update_freq = 10
     learning_rate = 1e-3
     gamma = 0.99
     epsilon = 1.0
     epsilon_min = 0.01
-    epsilon_decay = 0.995
-    video_freq = 50
+    epsilon_decay = 0.9999
+    video_freq = 500
     experiment_name = "DQN-Breakout"
 
+    mlflow.set_tracking_uri("http://localhost:5000/")
     mlflow.set_experiment(experiment_name)
 
     with mlflow.start_run():
@@ -66,14 +68,14 @@ def train():
             epsilon_decay,
         )
 
-        obs, _ = env.reset()
+        obs, info = env.reset()
         state = obs_to_state(np.zeros(state_shape), obs)
 
         episode_rewards = []
         best_reward = -float("inf")
         episode_reward = 0
 
-        for step in range(num_steps):
+        for step in trange(num_steps):
             action = agent.select_action(state, eval_mode=False)
             next_obs, reward, terminated, truncated, _ = env.step(action)
             next_state = obs_to_state(state, next_obs)
@@ -94,7 +96,7 @@ def train():
                     },
                 )
                 obs, _ = env.reset()
-                state = obs_to_state(np.zeros((stack_size * 3, 210, 160)), obs)
+                state = obs_to_state(np.zeros(state_shape), obs)
                 episode_reward = 0
 
             if len(replay_buffer) >= batch_size:
@@ -107,6 +109,6 @@ def train():
             agent.decay_epsilon()
 
             if (step + 1) % video_freq == 0:
-                record_video(agent, env_name, stack_size, step, 1)
+                record_video(agent, env_name, state_shape, step, 1)
 
         env.close()

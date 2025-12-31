@@ -9,7 +9,7 @@ def make_train_env(env_name: str) -> gym.Env:
 
 
 def make_eval_env(env_name: str, step: int) -> gym.Env:
-    env = gym.make(env_name)
+    env = gym.make(env_name, render_mode="rgb_array")
     env = gym.wrappers.RecordVideo(
         env,
         f"videos/step_{step}",
@@ -27,7 +27,7 @@ def obs_to_state(prev_state: np.ndarray, obs: np.ndarray) -> np.ndarray:
 def record_video(
     agent: DQNAgent,
     env_name: str,
-    stack_size: int,
+    state_shape: tuple,
     step: int,
     num_episodes: int,
 ):
@@ -35,14 +35,22 @@ def record_video(
 
     for _ in range(num_episodes):
         obs, _ = video_env.reset()
-        state = obs_to_state(np.zeros((stack_size * 3, 210, 160)), obs)
+        state = obs_to_state(np.zeros(state_shape), obs)
         done = False
-
+        total_rewards = 0
+        total_steps = 0
         while not done:
             action = agent.select_action(state, eval_mode=True)
-            obs, _, terminated, truncated, _ = video_env.step(action)
-            print(f"{step}")
+            obs, reward, terminated, truncated, _ = video_env.step(action)
+            total_rewards += reward
+            total_steps += 1
+
+            if total_steps > 1000:
+                break
+
             done = terminated or truncated
 
     video_env.close()
-    print(f"Video saved to videos/step_{step}.mp4")
+    print(
+        f"Video saved to videos/step_{step}.mp4 with total rewards {total_rewards} and total steps {total_steps}",
+    )

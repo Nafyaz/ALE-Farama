@@ -33,7 +33,7 @@ class DQNAgent:
 
         self.optimizer = optim.Adam(self.model.parameters(), lr=learning_rate)
 
-    def select_action(self, state: np.ndarray, eval_mode: bool):
+    def select_action(self, state: np.ndarray, eval_mode: bool) -> int:
         if not eval_mode and torch.rand(1).item() < self.epsilon:
             return torch.randint(0, self.action_dim, (1,)).item()
 
@@ -45,7 +45,7 @@ class DQNAgent:
             ).unsqueeze(0)
             return self.model(state).argmax().item()
 
-    def update(self, batch_size: int):
+    def update(self, batch_size: int) -> int:
         states, actions, rewards, next_states, dones = self.replay_buffer.sample(
             batch_size,
         )

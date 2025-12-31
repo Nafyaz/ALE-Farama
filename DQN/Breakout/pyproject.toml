@@ -6,10 +6,11 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "ale-py>=0.11.2",
-    "gymnasium[atari,other]>=1.2.1",
-    "mlflow>=3.5.1",
+    "gymnasium[atari,other]>=1.2.3",
+    "mlflow>=3.8.1",
     "numpy>=2.3.4",
     "torch>=2.9.0",
+    "tqdm>=4.67.1",
 ]
 
 [tool.ruff.lint]
