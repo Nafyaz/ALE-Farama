@@ -8,13 +8,13 @@ def make_train_env(env_name: str) -> gym.Env:
     return gym.make(env_name)
 
 
-def make_eval_env(env_name: str, step: int) -> gym.Env:
+def make_eval_env(env_name: str, path: str) -> gym.Env:
     env = gym.make(env_name, render_mode="rgb_array")
     env = gym.wrappers.RecordVideo(
         env,
-        f"videos/step_{step}",
+        f"videos/{path}",
         episode_trigger=lambda _: True,
-        name_prefix=f"step-{step}",
+        name_prefix=f"{path}",
     )
     return env
 
@@ -28,10 +28,10 @@ def record_video(
     agent: DQNAgent,
     env_name: str,
     state_shape: tuple,
-    step: int,
+    path: str,
     num_episodes: int,
 ):
-    video_env = make_eval_env(env_name, step)
+    video_env = make_eval_env(env_name, path)
 
     for _ in range(num_episodes):
         obs, _ = video_env.reset()
@@ -52,5 +52,5 @@ def record_video(
 
     video_env.close()
     print(
-        f"Video saved to videos/step_{step}.mp4 with total rewards {total_rewards} and total steps {total_steps}",
+        f"Video saved to videos/{path}.mp4 with total rewards {total_rewards} and total steps {total_steps}",
     )

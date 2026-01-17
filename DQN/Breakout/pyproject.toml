@@ -9,6 +9,8 @@ dependencies = [
     "gymnasium[atari,other]>=1.2.3",
     "mlflow>=3.8.1",
     "numpy>=2.3.4",
+    "nvidia-ml-py>=13.590.44",
+    "psutil>=7.2.1",
     "torch>=2.9.0",
     "tqdm>=4.67.1",
 ]

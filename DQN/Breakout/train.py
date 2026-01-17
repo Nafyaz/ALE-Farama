@@ -16,19 +16,22 @@ def train():
     env_name = "ALE/Breakout-v5"
     stack_size = 4
     num_steps = 100000
-    batch_size = 64
-    replay_buffer_size = 1000
-    target_update_freq = 10
+    batch_size = 128
+    replay_buffer_size = 10000
+    target_update_freq = 5
     learning_rate = 1e-3
     gamma = 0.99
     epsilon = 1.0
     epsilon_min = 0.01
     epsilon_decay = 0.9999
-    video_freq = 500
+    checkpoint_freq = 10000
     experiment_name = "DQN-Breakout"
 
     mlflow.set_tracking_uri("http://localhost:5000/")
     mlflow.set_experiment(experiment_name)
+
+    # mlflow.config.enable_system_metrics_logging()
+    # mlflow.config.set_system_metrics_sampling_interval(1)
 
     with mlflow.start_run():
         mlflow.log_params(
@@ -72,7 +75,6 @@ def train():
         state = obs_to_state(np.zeros(state_shape), obs)
 
         episode_rewards = []
-        best_reward = -float("inf")
         episode_reward = 0
 
         for step in trange(num_steps):
@@ -87,13 +89,12 @@ def train():
 
             if terminated or truncated:
                 episode_rewards.append(episode_reward)
-                best_reward = max(best_reward, episode_reward)
                 mlflow.log_metrics(
                     {
                         "episode_reward": episode_reward,
-                        "best_reward": best_reward,
                         "epsilon": agent.epsilon,
                     },
+                    step=step,
                 )
                 obs, _ = env.reset()
                 state = obs_to_state(np.zeros(state_shape), obs)
@@ -101,14 +102,18 @@ def train():
 
             if len(replay_buffer) >= batch_size:
                 loss = agent.update(batch_size)
-                mlflow.log_metrics({"loss": loss})
+                mlflow.log_metrics({"loss": loss}, step=step)
 
             if (step + 1) % target_update_freq == 0:
                 agent.update_target()
 
             agent.decay_epsilon()
 
-            if (step + 1) % video_freq == 0:
-                record_video(agent, env_name, state_shape, step, 1)
+            if (step + 1) % checkpoint_freq == 0:
+                record_video(agent, env_name, state_shape, f"{step + 1}", 1)
+                mlflow.pytorch.log_model(agent.model, name=f"checkpoint_{step + 1}")
+
+        record_video(agent, env_name, state_shape, f"{step + 1}", 1)
+        mlflow.pytorch.log_model(agent.model, name=f"checkpoint_{step + 1}")
 
         env.close()
