@@ -1,3 +1,4 @@
+import mlflow
 import numpy as np
 import torch
 from torch import optim
@@ -17,6 +18,7 @@ class DQNAgent:
         epsilon: float,
         epsilon_min: float,
         epsilon_decay: float,
+        model_location: str = None,
     ):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -27,13 +29,17 @@ class DQNAgent:
         self.epsilon_min = epsilon_min
         self.epsilon_decay = epsilon_decay
 
-        self.model = DQN(state_shape, action_dim).to(self.device)
+        if model_location is not None:
+            self.model = mlflow.pytorch.load_model(model_location).to(self.device)
+        else:
+            self.model = DQN(state_shape, action_dim).to(self.device)
+
         self.target_model = DQN(state_shape, action_dim).to(self.device)
         self.target_model.load_state_dict(self.model.state_dict())
 
         self.optimizer = optim.Adam(self.model.parameters(), lr=learning_rate)
 
-    def select_action(self, state: np.ndarray, eval_mode: bool) -> int:
+    def select_action(self, state: np.ndarray, eval_mode: bool = False) -> int:
         if not eval_mode and torch.rand(1).item() < self.epsilon:
             return torch.randint(0, self.action_dim, (1,)).item()
 
@@ -43,7 +49,10 @@ class DQNAgent:
                 dtype=torch.float32,
                 device=self.device,
             ).unsqueeze(0)
-            return self.model(state).argmax().item()
+
+            dist = torch.distributions.Categorical(logits=self.model(state))
+
+            return dist.sample().item()
 
     def update(self, batch_size: int) -> int:
         states, actions, rewards, next_states, dones = self.replay_buffer.sample(

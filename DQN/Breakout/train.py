@@ -22,21 +22,23 @@ def train():
     env_name = "ALE/Breakout-v5"
     experiment_name = "DQN-Breakout"
 
-    num_steps = 100000
+    num_steps = 1000000
     stack_size = 4
     frame_size = (84, 84)
     batch_size = 32
-    replay_buffer_size = 10000
+    replay_buffer_size = 50000
     learning_rate = 1e-3
     gamma = 0.99
 
-    epsilon = 1.0
+    epsilon = 0.5
     epsilon_min = 0.01
     epsilon_decay = 0.99995
 
     target_update_freq = 100
-    checkpoint_freq = 10000
+    checkpoint_freq = 50000
+
     rewards_buffer_size = 1000
+    episode_length_buffer_size = 100
 
     mlflow.set_tracking_uri("http://localhost:5000/")
     mlflow.set_experiment(experiment_name)
@@ -92,14 +94,20 @@ def train():
             epsilon,
             epsilon_min,
             epsilon_decay,
+            "/home/nafis/E/RL/ALE-Farama/DQN/Breakout/mlartifacts/1/models/m-fcf29855d3d743c9a3f0541e615840e6/artifacts/",
         )
 
-        state, info = env.reset()
         rewards = deque(maxlen=rewards_buffer_size)
+        episode_legths = deque(maxlen=episode_length_buffer_size)
+
+        state, info = env.reset()
+        episode_length = 0
 
         for step in trange(num_steps):
-            action = agent.select_action(state, eval_mode=False)
+            action = agent.select_action(state)
             next_state, reward, terminated, truncated, info = env.step(action)
+
+            episode_length += 1
             rewards.append(reward)
 
             replay_buffer.push(state, action, reward, terminated, next_state)
@@ -107,8 +115,14 @@ def train():
             state = next_state
 
             if terminated or truncated:
+                episode_legths.append(episode_length)
+                episode_length = 0
+
                 mlflow.log_metrics(
-                    {"episode_frame_number": info["episode_frame_number"]},
+                    {
+                        "trailing_average_episode_length": sum(episode_legths)
+                        / len(episode_legths),
+                    },
                     step=step,
                 )
                 state, info = env.reset()

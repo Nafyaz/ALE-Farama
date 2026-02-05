@@ -11,3 +11,5 @@ mlartifacts
 *.pyc
 
 *.db
+
+*.db-journal
