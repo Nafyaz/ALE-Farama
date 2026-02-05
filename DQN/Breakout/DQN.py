@@ -6,11 +6,11 @@ class DQN(nn.Module):
     def __init__(self, input_shape: tuple, action_dim: int):
         super().__init__()
         self.features = nn.Sequential(
-            nn.Conv3d(3, 32, kernel_size=(1, 8, 8), stride=4),
+            nn.Conv2d(4, 32, kernel_size=8, stride=4),
             nn.ReLU(),
-            nn.Conv3d(32, 64, kernel_size=(1, 4, 4), stride=2),
+            nn.Conv2d(32, 64, kernel_size=4, stride=2),
             nn.ReLU(),
-            nn.Conv3d(64, 64, kernel_size=(1, 3, 3), stride=1),
+            nn.Conv2d(64, 64, kernel_size=3, stride=1),
             nn.ReLU(),
             nn.Flatten(),
         )

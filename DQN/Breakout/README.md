@@ -1,10 +1,17 @@
 # Breakout with DQN
 
+## How to run
+
+```bash
+mlflow server --port 5000
+python main.py
+```
+
+## Components
+
 1. `train.py` is not concerned with pytorch, or how the model is implemented. It only cares about how to interact with  
    environment.
 2. `DQNAgent` is the bridge between environment and model. It is responsible for selecting actions, updating the model  
    etc.
 3. `DQN` is the model. It knows only torch.
 4. `ReplayBuffer` is for storage of states.
-5. obs/Observation: direct output of environment.
-6. state: processed observation.
